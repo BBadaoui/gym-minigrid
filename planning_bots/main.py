@@ -10,6 +10,7 @@ def main():
     parser = OptionParser()
     parser.add_option('--grid-size',
                       dest="grid_size",
+                      type = 'int',
                       help='minigrid grid size',
                       default = 16)
     options,args = parser.parse_args()
@@ -26,10 +27,10 @@ def main():
     goal = gym_minigrid.minigrid.Goal()
     
     while True:
-        if hasattr(env, 'mission'):
-            print('Mission: %s' % env.mission)
         if renderer.window == None:
                 break
+        if hasattr(env, 'mission'):
+            print('Mission: %s' % env.mission)
         tasks = [
             minigrid_tasks.Locate(key),
             minigrid_tasks.MoveTo(key),
