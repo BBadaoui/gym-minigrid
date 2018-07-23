@@ -24,7 +24,7 @@ class Locate(SimpleTask):
 
 class MoveTo(SimpleTask):
     def __init__(self,obj,offset=[np.zeros(2)],vicinity=True):
-        ##either move to or the the vicinity of an object or any point offset from obj
+        ##either move to or to the vicinity of an object or any point offset from obj
         super(MoveTo,self).__init__(obj)
         self.offset_set = offset
         self.to_vicinity = vicinity

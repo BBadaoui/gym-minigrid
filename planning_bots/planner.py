@@ -67,7 +67,7 @@ class PlanningAgent:
     def update_state_with_action(self,action,fwd_cell):
         self.actions_taken.append(action)
         self.current_steps = self.current_steps + 1 
-        fwd_pos = np.array(self.current_pos) + DIR_TO_VEC[self.direction]
+        fwd_pos = np.array(self.current_pos) + self.direction_vec
         ##assuming action is valid!
         if action == MiniGridEnv.Actions.left:
             self.direction -= 1
@@ -98,13 +98,13 @@ class PlanningAgent:
     def action_from_next_point(self,next_x,next_y):
         next_direction = np.array([next_x-self.current_pos[0],next_y-self.current_pos[1]])
         left_rotation = np.array([[0,-1],[1,0]])
-        if(all(next_direction==DIR_TO_VEC[self.direction])):
+        if(all(next_direction==self.direction_vec)):
             return MiniGridEnv.Actions.forward
-        elif next_direction.dot(DIR_TO_VEC[self.direction])==-1:
+        elif next_direction.dot(self.direction_vec)==-1:
             return MiniGridEnv.Actions.right
-        elif all(left_rotation.dot(next_direction)==DIR_TO_VEC[self.direction]):
+        elif all(left_rotation.dot(next_direction)==self.direction_vec):
             return MiniGridEnv.Actions.left
-        elif all(left_rotation.dot(DIR_TO_VEC[self.direction])==next_direction):
+        elif all(left_rotation.dot(self.direction_vec)==next_direction):
             return MiniGridEnv.Actions.right
         else:
             raise ValueError("next point not close enough to current position")
@@ -115,13 +115,10 @@ class PlanningAgent:
         self.reset()
         self.update_state_from_obs(first_obs)
         for task in tasks:
-            ##print('doing task ',task,sep='')
             while not task.is_completed(self):
                 action = task.next_action(self)
-                ##print(action)
-                fwd_cell = self.grid.get(*(np.array(self.current_pos)+DIR_TO_VEC[self.direction]))
+                fwd_cell = self.grid.get(*(np.array(self.current_pos)+self.direction_vec))
                 self.update_state_with_action(action,fwd_cell)
                 obs, reward, done, info = env.step(action)
                 self.update_state_from_obs(obs)
                 yield obs,reward,done,info
-            ##print('finished task ',task,sep='')

@@ -30,7 +30,7 @@ class PlannerMemory:
 
 ##TODO
 ##Add cues in exploration if prior info is known
-##exploration is currently stateless but should not in optimality
+##exploration is currently stateless but should not be in optimality
 class PlannerSpatialReasoning:
     def __init__(self,grid_side):
         self.graph_rep = nx.Graph()
